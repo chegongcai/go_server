@@ -2,30 +2,20 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"os"
 	"strings"
 	"time"
 )
 
-var client_conn net.Conn
-var client_err error
-
+//182.254.185.142  8080
 func main() {
 	//server
-	service := ":8080" //182.254.185.142  8080
+	service := ":8080"
 	tcpAddr, err := net.ResolveTCPAddr("tcp4", service)
 	checkErr(err)
 	listener, err := net.ListenTCP("tcp", tcpAddr)
 	checkErr(err)
-
-	//client
-	addr := "134.175.174.222:8080"
-	client_conn, client_err = net.Dial("tcp", addr)
-	if client_err != nil {
-		log.Fatal(client_err)
-	}
 
 	for {
 		conn, err := listener.Accept()
@@ -56,7 +46,7 @@ func handleClient(conn net.Conn) {
 		fmt.Println("****************************************************************************************")
 		fmt.Println("client ip: ", rAddr.String())
 		fmt.Println("time: ", GetTimeStamp())
-		fmt.Println("rev data: ", string(buf[0:n]))
+		fmt.Println("rev data for go client: ", string(buf[0:n]))
 		if buf[n-1] != '$' {
 			return
 		}
@@ -72,6 +62,7 @@ func GetTimeStamp() string {
 
 func ParseProtocol(rev_buf string, conn net.Conn) {
 	var arr_buf []string
+	var err error
 
 	arr_buf = strings.Split(rev_buf, "#") //先分割#
 
@@ -80,9 +71,9 @@ func ParseProtocol(rev_buf string, conn net.Conn) {
 
 	//send data
 	buf := fmt.Sprintf("S168#%s#%s#0009#ACK^LOCA,$", imei, serial_num)
-	fmt.Println("send data: ", buf)
-	_, client_err = client_conn.Write([]byte(buf))
-	if client_err != nil {
+	fmt.Println("send data to go client: ", buf)
+	_, err = conn.Write([]byte(buf))
+	if err != nil {
 		return
 	}
 	fmt.Println("****************************************************************************************")
