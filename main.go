@@ -1,4 +1,3 @@
-/*
 package main
 
 import (
@@ -79,8 +78,8 @@ func ParseProtocol(rev_buf string, conn net.Conn) {
 	}
 	fmt.Println("****************************************************************************************")
 }
-*/
 
+/*
 package main
 
 import (
@@ -125,7 +124,8 @@ func handleConnection(conn net.Conn) {
 		Log(conn.RemoteAddr().String(), "receive data string:\n", string(buffer[:n]))
 
 		//返回给客户端的信息
-		strTemp := "CofoxServer got msg \"" + string(buffer[:n]) + "\" at " + time.Now().String()
+		//strTemp := "CofoxServer got msg \"" + string(buffer[:n]) + "\" at " + time.Now().String()
+		strTemp := time.Now().String() + "Server have get the data\n"
 		conn.Write([]byte(strTemp))
 	}
 }
@@ -141,3 +141,4 @@ func CheckError(err error) {
 		fmt.Fprintf(os.Stderr, "Fatal error: %s", err.Error())
 	}
 }
+*/
