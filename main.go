@@ -66,11 +66,10 @@ func ParseProtocol(rev_buf string, conn net.Conn) {
 
 	arr_buf = strings.Split(rev_buf, "#") //先分割#
 
-	serial_num := string(arr_buf[3])
-	imei := string(arr_buf[2])
-	ip := string(arr_buf[0])
+	serial_num := string(arr_buf[2])
+	imei := string(arr_buf[1])
 	//send data
-	buf := fmt.Sprintf("%s#S168#%s#%s#0009#ACK^LOCA,$", ip, imei, serial_num)
+	buf := fmt.Sprintf("S168#%s#%s#0009#ACK^LOCA,$", imei, serial_num)
 	fmt.Println("send data to go client: ", buf)
 	_, err = conn.Write([]byte(buf))
 	if err != nil {
